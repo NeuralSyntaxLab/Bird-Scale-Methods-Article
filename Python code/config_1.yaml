@@ -1,0 +1,17 @@
+room_name: BigRecRoom
+env_system: 1 # the ID of the environmental system (single control setup connected to up to 8 boxes)
+scaleOutputBasePath: /Users/cohenlab/Desktop/control_main_code_test/scaleData
+scaleDataReadingAndSaving: 1
+slackingTime: '18:00' # write a time in 'HH:MM' format. For one digit times add a zero: '08:01' and not '8:1'.
+sendWeightReportToSlack: 1
+# CHANNELS 0-7: enter the name of the bird connected to each MUX port. This will be used to create a folder for each bird and store its weight reports. 
+# Leave disconnected channels empty.
+channel0: 
+channel1: 
+channel2: 
+channel3: 
+channel4: 'bird1'
+channel5:
+channel6: 
+channel7: 
+
