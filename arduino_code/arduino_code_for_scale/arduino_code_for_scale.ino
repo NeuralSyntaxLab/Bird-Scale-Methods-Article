@@ -28,18 +28,14 @@ NAU7802 myScale;
 bool settingsDetected = false; //Used to prompt user to calibrate their scale
 
 const int numScales = 8; // Number of Qwiic Scale ports available
-int samplesToTake = 16; //Number of samples to average over when calculating weight using getWeight function. Default is 8
+int samplesToTake = 8; //Number of samples to average over when calculating weight using getWeight function. Default is 8
 
 int incomingByte = 0; // Variable that will contain user input
 
-unsigned long seconds = 1000L;
+unsigned long seconds = 875L;
 unsigned long minutes = seconds * 1;
 unsigned long DelayRate = minutes;
 
-// Variables to track loop timings
-unsigned long loopStartTime;
-unsigned long totalLoopTime = 0;
-int loopCounter = 0;
 
 void setup() {
   // pinMode(LIGHT_SWITCH_PIN, OUTPUT);
@@ -70,8 +66,6 @@ void setup() {
 }
 
 void loop() {
-  loopStartTime = millis(); // Record start time for each loop
-
   for (int i = 0; i < numScales; ++i) {
     myMux.setPort(i); // Activate communication with active scale #[i], disable all other ports
  
@@ -94,25 +88,7 @@ void loop() {
   Serial.println("");
   myMux.setPort(-1); // disable all ports
 
-  // delay(DelayRate); //wait 1 second until next data reading
-
-  // End of loop processing - calculate loop time
-  unsigned long loopEndTime = millis();
-  unsigned long loopTime = loopEndTime - loopStartTime;
-
-  totalLoopTime += loopTime; // Accumulate loop times
-  loopCounter++; // Increment loop counter
-
-  // // Check every 10 loops
-  // if (loopCounter % 10 == 0) {
-  //   unsigned long averageTime10 = totalLoopTime / 10;
-  //   Serial.print("Average loop time for last 10 loops: ");
-  //   Serial.print(averageTime10);
-  //   Serial.println(" ms");
-  //   totalLoopTime = 0; // Reset total time after 10 loops
-  //   delay(5000);
-  // }
-
+  delay(DelayRate); //wait 1 second until next data reading
 }
 
 //Scale functions for communicating with EEPROM(non-vlatile memory of arduino)
