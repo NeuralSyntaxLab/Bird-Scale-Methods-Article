@@ -4,7 +4,7 @@
 This code reads data from up to 8 scale devices using Sparkfun QwiicScale MUX breadboard. Each weight measurement is received through one of eight different ports available on the MUX board.
 Weight measurements from all channels are collected every second and sent to an external python script running on a computer connected to the Arduino.
 
-This code also contains calibrating functions, so upon the installment of a new scale device the python script must be stoped, and the calibration process is done here in the serial monitor of the IDE.
+For calibrating the scales, load 'arduin_code_calibrate' from the adjacent folder in the repository and follow the instructions.
 
 See Scale System Guide located in the main repository for more information.
 
