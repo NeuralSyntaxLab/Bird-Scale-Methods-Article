@@ -31,7 +31,7 @@ see [general part list](link) for full list of parts and where to get them.
 <img src = "https://github.com/user-attachments/assets/6afa6e9a-1b17-4121-80c2-9fbb5fe0f42a" width = "1180" height = "800"> <br>
 
 ### Assembly
-See [Scale System assembly guide](link) for assembly instructions for each part.
+See [Scale System assembly guide](https://github.com/NeuralSyntaxLab/Bird-Scale-Methods-Article/blob/main/User%20Guides/Scale%20System%20Assembly%20Guide.md) for assembly instructions for each part.
 
 ## 3. Wiring the Scale System 
 
@@ -58,7 +58,7 @@ Once the system is up and connected, wait for the minicomputer to start up and f
 
 ### 1. Calibrating the scales
 1. Exit the automaticly-started control script.
-2. Load Arduino with [arduino_code_2](https://github.com/NeuralSyntaxLab/acoustic_chamber_environment_control/blob/scale_system_add/arduino_codes/arduino_code_2/arduino_code_2.ino) (see instructions [here](https://docs.arduino.cc/learn/starting-guide/the-arduino-software-ide)).
+2. Load Arduino with [arduino_code_for_scale](https://github.com/NeuralSyntaxLab/Bird-Scale-Methods-Article/blob/main/arduino_code/arduino_code_for_scale/arduino_code_for_scale.ino).
 3. Open the Serial Monitor: <br>
 On the Arduino IDE, click `Tools` -> `Serial Monitor` or click on the top right Serial Monitor logo. ![Screenshot 2024-07-22 at 11 08 46](https://github.com/user-attachments/assets/3e3f0b35-7ee0-4f2b-8f74-7176461e129b) 
 When the serial monitor opens, it should immediately start communicating with the MUX system and notify the user with the satatus of every connected scale and instructions on how to calibrate. Be prepared with a calibrating item with known exact weight (preferably within a range of a few grams).
@@ -73,7 +73,7 @@ When the serial monitor opens, it should immediately start communicating with th
 4. Wait for the setup phase to complete, click on the Message panel to pass input to the Arduino, write `c` and press enter. Calibration process will now begin and indicative prompts will appear.
   * At initial setup, the Arduino will not detect calibration values for any scale and calibration proces will start automatically!
 
-5. Follow instructions on screen to complete the calibration process for the desired scales (for more information see [arduino code guide](https://github.com/NeuralSyntaxLab/acoustic_chamber_environment_control/blob/9a08e14dcccb3a1217388fe7d782128831e4b6a5/arduino_codes/Arduino%20code%20guide.md)).
+5. Follow instructions on screen to complete the calibration process for the desired scales.
 
 #### Example 1: Calibrating in and already-used setup, but with new scale wiring
 <img src="https://github.com/user-attachments/assets/0ef7554e-a696-4800-8037-2b2d359d2b2f" width="1150" height="500">
