@@ -1,15 +1,12 @@
 /***************************************************************************
-* THIS IS THE MAIN ARDUINO CODE FOR ACOUSTIC CHAMBERS LIGHT CYCLE CONTROL, AS WELL AS SENSOR(DHT+LIGHT) & WEIGHT DATA ACQUISITION
+* THIS IS THE MAIN ARDUINO CODE FOR THE BIRD SCALE SYSTEM
 
-* It has two functionalities -
-*   1. Turn the lights on/off, based on an input from the serial port.
-*       Data from the serial port arrives as an int, and so we set a
-*       threshold to decide whether the light goes on or off.
-*
-*   2. Read data from temp. and humidity sensors, as well as light and weight
-*     sensors, and print values to the serial port (via Serial.print()).
-*     This data will later be read by our Raspberry Pi device, whenever
-*     we're ready to consume the data.
+This code reads data from up to 8 scale devices using Sparkfun QwiicScale MUX breadboard. Each weight measurement is received through one of eight different ports available on the MUX board.
+Weight measurements from all channels are collected every second and sent to an external python script running on a computer connected to the Arduino.
+
+This code also contains calibrating functions, so upon the installment of a new scale device the python script must be stoped, and the calibration process is done here in the serial monitor of the IDE.
+
+See Scale System Guide located in the main repository for more information.
 
 NOTE: PLEASE MAKE SURE THAT THE FOLLOWING LIBRARY IS INSTALLED IN ARDUINO IDE:
 SparkFun I2C Mux Arduino Library
