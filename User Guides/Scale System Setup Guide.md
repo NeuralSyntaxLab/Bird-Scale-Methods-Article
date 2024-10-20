@@ -58,7 +58,7 @@ Once the system is up and connected, wait for the minicomputer to start up and f
 
 ### 1. Calibrating the scales
 1. Exit the automaticly-started control script.
-2. Load Arduino with [arduino_code_for_scale](https://github.com/NeuralSyntaxLab/Bird-Scale-Methods-Article/blob/main/arduino_code/arduino_code_for_scale/arduino_code_for_scale.ino).
+2. Load Arduino with [arduino_code_calibrate](https://github.com/NeuralSyntaxLab/Bird-Scale-Methods-Article/blob/2b2e9f8543eca7a4c572af648797234ceb79ad54/arduino_code/arduino_code_calibrate/arduino_code_calibrate.ino).
 3. Open the Serial Monitor: <br>
 On the Arduino IDE, click `Tools` -> `Serial Monitor` or click on the top right Serial Monitor logo. ![Screenshot 2024-07-22 at 11 08 46](https://github.com/user-attachments/assets/3e3f0b35-7ee0-4f2b-8f74-7176461e129b) 
 When the serial monitor opens, it should immediately start communicating with the MUX system and notify the user with the satatus of every connected scale and instructions on how to calibrate. Be prepared with a calibrating item with known exact weight (preferably within a range of a few grams).
