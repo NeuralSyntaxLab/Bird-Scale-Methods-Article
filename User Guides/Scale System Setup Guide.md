@@ -102,19 +102,18 @@ After downloading this repository to your computer, you will find the `config_1.
 
 Here, you will need to enter the names of the birds that have weighing devices in their cage in the `Channels` section.
 Each docking port (channel) is connected to one scale. Write the name of the bird that is connected to each channel, with apostrophes.
-You also need to make sure that the `scaleDataReadingAndSaving` has the input of **1**, and that the `scaleOutputBasePath` is correct. The first ensures that the 
-At last, enter the time of day you wish to get the daily weight reports sent to the lab's `monitor_alerts` channel. 
+You also need to make sure to create a directory for the output data to be stored. Enter the full path to that directory in `scaleOutputBasePath`. 
 
 For example - 'bird1' is in the acoustic chamber with the scale connected to channel 0. 'bird2' is in the acoustic chamber that is connected to channel 7. 
 
-![Example 1](![config_file_Example](https://github.com/user-attachments/assets/17443835-1161-45b0-a3e2-036d706020b1)
-)
+![config_file_Example](https://github.com/user-attachments/assets/8482665c-0115-4641-b4a7-a390242a44bc)
+
 
 ### 3. Re-run the main control script
 After calibrating the scales and updating the config file, the system is ready to go.
 In order to run the main control script, simply reboot the minicomputer. The script should run automatically at startup.
 
-* It is recommended to test the system to see that it works properly before leaving it to run. You can run the script by opening the `Acoustic Chambers Environment Control` folder, and double clicking the `startup_script.sh` script and choose to execute it (not in terminal) when prompted.
+* It is recommended to test the system to see that it works properly before leaving it to run. You can run the script by ...
 * You can also open the terminal and run the following comand (Change paths accordingly):
 ```
 python /path/to/script/main_control.py --config=/path/to/config/file
