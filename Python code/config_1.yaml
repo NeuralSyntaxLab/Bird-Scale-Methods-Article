@@ -1,17 +1,20 @@
 room_name: ControlTestRoom
 env_system: 1 # the ID of the environmental system (single control setup connected to up to 8 boxes)
-scaleOutputBasePath: /Users/cohenlab/Documents/Scale Methods Article/code_testing
-scaleDataReadingAndSaving: 1
-slackingTime: '15:00' # write a time in 'HH:MM' format. For one digit times add a zero: '08:01' and not '8:1'.
-sendWeightReportToSlack: 0
+dataOutputBasePath: /path/to/output/folder/here # make sure to create the folder in the desired destination.
+
 # CHANNELS 0-7: enter the name of the bird connected to each MUX port. This will be used to create a folder for each bird and store its weight reports. 
 # Leave disconnected channels empty.
-channel0: 'test1'
+channel0: 'bird1'
 channel1: 
 channel2: 
 channel3: 
 channel4: 
 channel5:
 channel6: 
-channel7: 'test2'
+channel7: 'bird2'
 
+# Future Update:
+# sendWeightReportToSlack: 0 # change to '1' in order to send weight report to slack daily
+# slackChannelId: "" # enter your designated slack channel ID
+# slackApiToken: "" # enter your slack API token here. NOTE! This token is confidential, only enter token once this file is offline on your computer!
+# slackingTime: '15:00' # write a time in 'HH:MM' format. For one digit times add a zero: '08:01' and not '8:1'.

@@ -13,11 +13,6 @@ import pandas as pd
 
 SERIAL_PORT_DATA_RATE = 9600
 
-SLACK_CHANNEL_ID = "" # The Slack channel id for the `monitor_alerts` channel
-
-SLACK_TOKEN = "" # combine the following lines in order to assemble the sack token
-
-
 POSSIBLE_DEVICE_PATHS = [
     "/dev/ttyACM0", 
     "/dev/ttyACM1", 
@@ -138,6 +133,17 @@ if __name__ == "__main__":
         print("\tSuccessfully connected to Serial device")
     except Exception as err:
         print(f"Failed connecting to the Serial device - `{err}`")
+        sys.exit(1)
+    
+
+    ## Part 2 - Initialize Slack
+    SLACK_CHANNEL_ID = "" # The Slack channel id for the `monitor_alerts` channel
+    SLACK_TOKEN = "" # combine the following lines in order to assemble the sack token
+    try:
+        slack_client = WebClient(token=SLACK_TOKEN)
+        print("\tSuccessfully initialized Slack client")
+    except Exception as err:
+        print(f"Failed initializing Slack client - `{err}`")
         sys.exit(1)
 
 
