@@ -13,3 +13,7 @@ This repository contains all supplementary materials for the Bird Scale Methods 
 6. 'PNG' versions of the figures shown in the article.
 7. '.tex' file of the manuscript.
 
+
+## Scale Design Files
+This folder contains the full design of the scale device.
+Here you can find '.pdf' files of the base, pin (3D printed Delrin perch) and weight, as well as the design summary page and a '3D-pfd' file for 360 view of the device. Also included is a '.skp' design file for use with CAD programs. Use this file to create the parts yourself.
