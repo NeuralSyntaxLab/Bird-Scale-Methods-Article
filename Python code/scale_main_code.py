@@ -3,25 +3,19 @@ import sys
 import os
 import time
 import yaml 
-from zoneinfo import ZoneInfo
 from argparse import ArgumentParser
-import glob
-import astral
-from astral.sun import sun
 import serial
 import serial.tools.list_ports
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import io
 
 
 SERIAL_PORT_DATA_RATE = 9600
 
-SLACK_CHANNEL_ID = "" # The Slack channel id 
-SLACK_TOKEN = "" # enter your slack API token here
+SLACK_CHANNEL_ID = "" # The Slack channel id for the `monitor_alerts` channel
+
+SLACK_TOKEN = "" # combine the following lines in order to assemble the sack token
 
 
 POSSIBLE_DEVICE_PATHS = [
@@ -40,11 +34,6 @@ POSSIBLE_DEVICE_PATHS = [
     "COM5" 
 ] 
 
-
-# These are the names of the CSV columns.
-# NOTE - The last column must be dateTime, since we're counting the rest of the fields to verify
-# the data vailidity!
-CSV_FIELD_NAMES = ['humidity(%)','temprature(deg celsius)','photoresistor(milivolt)','Scale Reading (grams)', 'dateTime']
 
 strf_format = '%Y-%m-%d %H:%M' # This is the format for extracting datetime object from the 'Time' column string
 scale_report_strf_time_format = '%Y-%m-%d %H:%M:%S' # This is the time format to be saved in the weight reports
@@ -82,14 +71,14 @@ def get_arduino_data(serial_device):
     We return a list of 9 items - 8 weight measurement values and one date&time string
     """
     current_time = datetime.datetime.now()
-    formatted_time = current_time.strftime("%Y_%m_%d_%H_%M_%S")
+    formatted_time = current_time.strftime(scale_report_strf_time_format)
 
     try:
         arduino_raw_data = serial_device.readline()
     except Exception as err:
         print(f"Failed reading data from Arduino! {err}")
         return None
-    print(arduino_raw_data)
+    # print(arduino_raw_data)
     data_packet = parse_arduino_data(arduino_raw_data)
 
     # Verify that the data was read properly. 
@@ -100,9 +89,6 @@ def get_arduino_data(serial_device):
 
     data_packet.append(formatted_time)
     return data_packet
-    # tuples = [(key, value) for i, (key, value) in enumerate(zip(CSV_FIELD_NAMES, data_packet))]
-
-    # return dict(tuples)
 
 
 def parse_arduino_data(arduino_raw_data):
@@ -126,12 +112,8 @@ def parse_arduino_data(arduino_raw_data):
     return weights_packet
 
 
-
-
-
-
 if __name__ == "__main__":
-    print("Hello! This is the Arduino controller script!\n")
+    print("Hello! This is the scale system controller script!\n")
 
     ## Part 1 - parse the config file
     parser = ArgumentParser()
@@ -141,7 +123,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     #config_path = args.config
-    config_path = r'/Users/cohenlab/Documents/Scale Methods Article/code_testing/config_1.yaml'
+    config_path = r'/Users/cohenlab/Documents/Scale Methods Article/analyzer_codes/config_1.yaml'
     if config_path is None:
         raise Exception("No config file was supplied! Please rerun and add `--config=/path/to/config` ")
 
@@ -162,12 +144,6 @@ if __name__ == "__main__":
     ## Part 3 - This is the main part of the code, which runs in a loop and reads data from sensors, and controls the light switch.
 
     scale_data = [] # This array will hande temporary scale data and will be reset once the defined time is over
-    
-    temp_sensor_data = [] # This array will handle the temporary sensor data, and will be reset once the defined time is over
-    daily_sensor_data = pd.DataFrame() # This array will handle daily sensor data and will be reset once a day is over
-
-    temp_loop_start_time = datetime.datetime.now()
-    day_loop_start_time = datetime.datetime.now()
 
     # if config_data["slackingTime"] is not None:
     #     last_slacking_time = datetime.datetime.now() # This timestamp will help indicate if we need to send the weight report to slack
@@ -197,47 +173,39 @@ if __name__ == "__main__":
         current_time = datetime.datetime.now()
         print(f"Current UTC time is {current_time}\n")
 
-        data_from_last_minute = []
-
         minute_loop_start_time = datetime.datetime.now()
        
-        
         # Part 3.2 - COLLECT DATA FOR 1 MINUTE
         while True:
             data = get_arduino_data(serial_device)
             # print("get arduino data: ", data)
             if data is None: # There was an error, moving on and ignoring this specific read
                 continue
-            print("data:", data)
 
             scale_readings = [data[-1], data[:-1]]
-            print("scale readings:", scale_readings)
-            scale_data.append([datetime.datetime.now().strftime(scale_report_strf_time_format), scale_readings])
-                
+            scale_data.append(scale_readings)
+
             if (datetime.datetime.now() - minute_loop_start_time).seconds >= 60:
                 print("\tFinished collecting data for 1 minute")
                 break
             time.sleep(1)
-        print(scale_data)
-   
-    
 
-        # Part 3.3 - UPDATE WEIGHT REPORTS       
-        # Add temporary scale data to existing reports from each bird:  
-        print(f"\tWriting scale data to disk...")
+        # Part 3.3 - UPDATE WEIGHT REPORTS    
+        print(f"\tWriting scale data to disk...")   
+
+        # Generate base path for saving the weight reports to
         path_to_weight_reports = os.path.join(config_data["scaleOutputBasePath"], "weight_reports")
 
-        # This dataframe will contain the current temporary time and weight data from all active scales
-        scale_df = pd.DataFrame()
+        scale_df = pd.DataFrame() # This dataframe will contain the current temporary time and weight data from all active scales
+
         # Create the time column once as it is similar for all
         scale_df['Time'] = [item[0] for item in scale_data] 
 
         # Iterate through all birds, if they have an active scale, add the new collected data to the weight report
         for i in range(8):
-            if bird_catalog[f"channel{i}"] is None:
-                # print(f"\t\tno birds in channel {i}, moving on...")
+            if bird_catalog[f"channel{i}"] is None: # Config file has an empty field for this MUX channel
                 continue
-            else:
+            else: # Config file has a bird name for current MUX channel...
                 bird = bird_catalog[f"channel{i}"]
                 print(f"\t\tbird '{bird}' in channel {i}, adding temporary scale data to report...")
                 # Collect data for current bird into DataFrame.
@@ -247,8 +215,11 @@ if __name__ == "__main__":
                 path_to_current_bird = os.path.join(path_to_weight_reports, bird)
                 os.makedirs(path_to_current_bird, exist_ok=True) 
             
-                # date_today = datetime.datetime.now().strftime("%Y_%m_%d") # current date
                 weight_report_filename = os.path.join(path_to_current_bird, f"{bird}_weight_report.csv")
+
+                # Try reading existing weight report for current bird. 
+                # If one exists, concatenate the new data and save the updated report. 
+                # Else, save the current data as a new weight report.
                 try:
                     existing_bird_data = pd.read_csv(weight_report_filename)
                     joint_bird_data = pd.concat([existing_bird_data, new_bird_data], ignore_index=True)
@@ -258,7 +229,6 @@ if __name__ == "__main__":
                     except Exception as e:
                         print(f"\t\tAn error occurred while saving the new weight report for bird {bird}: {e}")
                 except FileNotFoundError:
-                    # If there is no existing weight report for this bird, use current data to form a new report.
                     new_bird_data.to_csv(weight_report_filename, index=False)
                     print(f"\tSuccessfully created a new weight report for bird: {bird}. It was saved to: {weight_report_filename}.\n")
             print("\n")
