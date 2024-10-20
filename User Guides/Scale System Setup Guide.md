@@ -57,7 +57,7 @@ Before operating the Scale System setup, follow these instructions to connect al
 Once the system is up and connected, wait for the minicomputer to start up and follow the instructions:
 
 ### 1. Calibrating the scales
-1. Exit the automaticly-started control script.
+1. If running, stop the main control script (`scale_main_code.py`).
 2. Load Arduino with [arduino_code_calibrate](https://github.com/NeuralSyntaxLab/Bird-Scale-Methods-Article/blob/2b2e9f8543eca7a4c572af648797234ceb79ad54/arduino_code/arduino_code_calibrate/arduino_code_calibrate.ino).
 3. Open the Serial Monitor: <br>
 On the Arduino IDE, click `Tools` -> `Serial Monitor` or click on the top right Serial Monitor logo. ![Screenshot 2024-07-22 at 11 08 46](https://github.com/user-attachments/assets/3e3f0b35-7ee0-4f2b-8f74-7176461e129b) 
@@ -98,16 +98,17 @@ Now every second a new line of data is given. We can see that it is a used setup
 
 
 ### 2. Edit config file
-Open the `Acoustic Chambers Environment Control` folder. Click on the `config_files` folder and open the relevant config file for editing (If not familiar, read [how to use the config file](https://github.com/NeuralSyntaxLab/acoustic_chamber_environment_control/blob/46e9405cdcb7c96c5ceae5696ab63bdf03effe7b/config_files/How%20to%20use%20the%20config%20file.md) for more information).
+After downloading this repository to your computer, you will find the `config_1.yaml` file in the `Python code` folder. Open the config file [example here](https://github.com/NeuralSyntaxLab/Bird-Scale-Methods-Article/blob/f04243c847f9a7968533611af24f28679061ca57/Python%20code/config_1.yaml).
 
 Here, you will need to enter the names of the birds that have weighing devices in their cage in the `Channels` section.
-Each docking point (channel) is connected to one scale. Write the name of the bird that connected to each channel with apostrophes.
-You also need to make sure the the `scaleDataReadingAndSaving` has the input of **1**, and that the `scaleOutputBasePath` is correct.
+Each docking port (channel) is connected to one scale. Write the name of the bird that is connected to each channel, with apostrophes.
+You also need to make sure that the `scaleDataReadingAndSaving` has the input of **1**, and that the `scaleOutputBasePath` is correct. The first ensures that the 
 At last, enter the time of day you wish to get the daily weight reports sent to the lab's `monitor_alerts` channel. 
 
-For example - `channel1: 'lr17'`, send reports daily at 12:05PM
+For example - 'bird1' is in the acoustic chamber with the scale connected to channel 0. 'bird2' is in the acoustic chamber that is connected to channel 7. 
 
-![Example 1](https://github.com/user-attachments/assets/35ef96ff-7ee1-4e23-ad93-af856b1b6240)
+![Example 1](![config_file_Example](https://github.com/user-attachments/assets/17443835-1161-45b0-a3e2-036d706020b1)
+)
 
 ### 3. Re-run the main control script
 After calibrating the scales and updating the config file, the system is ready to go.
